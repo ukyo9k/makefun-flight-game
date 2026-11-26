@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kestrel Ridge Run — a flight game</title>
+<link rel="stylesheet" href="style.css">
+<script src="vendor/three.min.js"></script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="view"></canvas>
+
+  <!-- ============ HUD ============ -->
+  <div id="hud" class="hidden">
+    <div id="hud-top-left" class="panel">
+      <div class="gauge"><span class="label">AIRSPEED</span><span class="value"><b id="hud-speed">0</b><i> kt</i></span></div>
+      <div class="gauge"><span class="label">ALTITUDE</span><span class="value"><b id="hud-alt">0</b><i> ft</i></span></div>
+      <div class="gauge"><span class="label">VERT SPEED</span><span class="value"><b id="hud-vs">0</b><i> ft/min</i></span></div>
+      <div class="gauge"><span class="label">THROTTLE</span><span class="value"><b id="hud-thr">0</b><i> %</i></span></div>
+    </div>
+
+    <div id="hud-compass" class="panel">
+      <div id="compass-strip"></div>
+      <div id="hud-heading"><b id="hud-hdg">090</b>&deg;</div>
+    </div>
+
+    <div id="hud-top-right" class="panel">
+      <div class="gauge"><span class="label">FUEL</span>
+        <span class="bar"><span id="hud-fuel-bar" class="fill fuel"></span></span>
+        <span class="value"><b id="hud-fuel">100</b><i> %</i></span>
+      </div>
+      <div class="gauge"><span class="label">AIRFRAME</span>
+        <span class="bar"><span id="hud-dmg-bar" class="fill dmg"></span></span>
+        <span class="value"><b id="hud-dmg">0</b><i> % dmg</i></span>
+      </div>
+      <div class="gauge"><span class="label">FLAPS</span><span class="value"><b id="hud-flaps">UP</b></span></div>
+      <div class="gauge"><span class="label">GEAR</span><span class="value"><b id="hud-gear">DOWN</b></span></div>
+    </div>
+
+    <div id="hud-warnings">
+      <span id="warn-stall" class="warn">STALL</span>
+      <span id="warn-gear" class="warn">GEAR UP</span>
+      <span id="warn-fuel" class="warn">LOW FUEL</span>
+      <span id="warn-terrain" class="warn">TERRAIN</span>
+    </div>
+
+    <div id="hud-horizon"><canvas id="horizon" width="150" height="150"></canvas><span class="label">ATTITUDE</span></div>
+
+    <div id="hud-objective" class="panel">
+      <div id="hud-mission">MISSION</div>
+      <div id="hud-objective-text">—</div>
+      <div id="hud-rings">RINGS <b id="hud-ring-count">0/0</b></div>
+    </div>
+
+    <div id="hud-score" class="panel">
+      <div class="label">SCORE</div>
+      <div id="hud-score-value">0</div>
+      <div id="hud-timer">00:00</div>
+    </div>
+
+    <div id="hud-toast"></div>
+    <div id="hud-center-dot"></div>
+  </div>
+
+  <!-- ============ MENU ============ -->
+  <div id="menu" class="overlay">
+    <div class="menu-card">
+      <h1>KESTREL<br>RIDGE RUN</h1>
+      <p class="tagline">Fly the KV-7 Kestrel through the ridges of Aeris Vale.<br>
+      Rings, canyons, one runway — and only so much fuel.</p>
+      <div class="missions">
+        <button class="mission-btn" data-mission="ring-run">
+          <b>1 · RING RUN</b><span>Thread 10 rings through the valley, then land on Runway 09.</span>
+        </button>
+        <button class="mission-btn" data-mission="canyon-dash">
+          <b>2 · CANYON DASH</b><span>Low-level sprint: 6 gates under 500 ft, against the clock.</span>
+        </button>
+        <button class="mission-btn" data-mission="precision-landing">
+          <b>3 · PRECISION LANDING</b><span>Take off, climb to the beacon, then grease it on the numbers.</span>
+        </button>
+      </div>
+      <div class="controls">
+        <div><b>W / S</b> pitch &nbsp;·&nbsp; <b>A / D</b> roll &nbsp;·&nbsp; <b>Q / E</b> rudder</div>
+        <div><b>Shift / Ctrl</b> throttle &nbsp;·&nbsp; <b>F</b> flaps &nbsp;·&nbsp; <b>G</b> gear &nbsp;·&nbsp; <b>C</b> camera</div>
+        <div><b>Mouse</b> steer toward cursor &nbsp;·&nbsp; <b>P</b> pause &nbsp;·&nbsp; <b>R</b> restart &nbsp;·&nbsp; <b>M</b> sound</div>
+      </div>
+      <p class="hint">Click a mission or press 1 / 2 / 3 to fly.</p>
+    </div>
+  </div>
+
+  <!-- ============ END SCREEN ============ -->
+  <div id="endscreen" class="overlay hidden">
+    <div class="menu-card">
+      <h1 id="end-title">MISSION COMPLETE</h1>
+      <p id="end-sub" class="tagline"></p>
+      <div id="end-stats" class="end-stats"></div>
+      <button id="end-again" class="mission-btn"><b>FLY AGAIN &nbsp;·&nbsp; R</b></button>
+      <button id="end-menu" class="mission-btn"><b>CHANGE MISSION &nbsp;·&nbsp; Esc</b></button>
+    </div>
+  </div>
+
+  <div id="paused" class="overlay hidden"><div class="menu-card"><h1>PAUSED</h1><p class="tagline">Press P to keep flying.</p></div></div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
